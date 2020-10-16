@@ -4,11 +4,11 @@ let bukkake = 0;
 // Define configuration options
 const opts = {
   identity: {
-    username: process.env.BOT_USERNAME,
+    username: 'SausageMcBot',
     password: process.env.OAUTH_TOKEN
   },
   channels: [
-    process.env.CHANNEL_NAME
+    'SausageMcBurn'
   ]
 };
 
