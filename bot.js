@@ -23,25 +23,7 @@ client.connect();
 
 // globals
 let bukkake = 0;
-let quotes = ["Elbow pasta is the Milhouse Van Houten of pasta",
-"ive arrived clown boys and squirter girls",
-"ive returned and im sad horny",
-"mi pachoochie es juithy",
-"step on me steve harrington", 
-"my mom is blue balling me with her lasagna",
-"im boutta squirt some sauce in a minute", 
-"horny typing is a lot of work my brain barely Functioning", 
-"want glencour to raw me out goodnigjt", 
-"wish xqc would pounce on this xpussc", 
-"i sucked a shelob before", 
-"threats are hot tho", 
-"play with me be my gacha sugar daddy", 
-"typing and stealing my grandma's chicken wings rn", 
-"oh to be a dumpster...", 
-"need dj mans to fill my hol- I mean... the void in my as--heart", 
-"time to start peppegging his dad", 
-"go use ur douching toilet beta boy @NuggiesBoy",
-"boutta astral project my juicy pussy to the perfect dimension"];
+let puchiFile = 'puchisms.txt'
 
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
@@ -71,10 +53,17 @@ function onMessageHandler (target, context, msg, self) {
     return;
   }
   if (commandName === '!puchi') {
+    quotes = getPuchiQuotes();
     ribbon = String.fromCodePoint(0x1F380);
     client.say(target, `${ribbon} ${quotes[Math.floor(Math.random()*quotes.length)]} ${ribbon}`);
     return;
   }
+}
+
+function getPuchiQuotes() {
+  let fs = require('fs');
+  let quotes = fs.readFileSync(puchiFile).toString().split("\n");
+  return quotes;
 }
 
 // Function called when the "dice" command is issued
