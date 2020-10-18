@@ -23,7 +23,7 @@ client.connect();
 
 // globals
 let bukkake = 0;
-let puchiFile = 'puchisms.txt'
+let puchiFile = '/home/burnsnoss/bot/puchisms.txt'
 
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
