@@ -24,6 +24,7 @@ client.connect();
 // globals
 let bukkake = 0;
 let puchiFile = '/home/burnsnoss/bot/puchisms.txt'
+let abbyFile = '/home/burnsnoss/bot/abbyshapiro.txt'
 
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
@@ -53,16 +54,26 @@ function onMessageHandler (target, context, msg, self) {
     return;
   }
   if (commandName === '!puchi') {
-    quotes = getPuchiQuotes();
-    ribbon = String.fromCodePoint(0x1F380);
+    let quotes = getPuchiQuotes();
+    let ribbon = String.fromCodePoint(0x1F380);
     client.say(target, `${ribbon} ${quotes[Math.floor(Math.random()*quotes.length)]} ${ribbon}`);
     return;
+  }
+  if (commandName === '!abby' || commandName === '!abbyshapiro') {
+    let quotes = getAbbyQuotes();
+    client.say(target, `${quotes[Math.floor(Math.random()*quotes.length)]}`);
   }
 }
 
 function getPuchiQuotes() {
   let fs = require('fs');
   let quotes = fs.readFileSync(puchiFile).toString().split("\n");
+  return quotes;
+}
+
+function getAbbyQuotes() {
+  let fs = require('fs');
+  let quotes = fs.readFileSync(abbyFile).toString().split(".");
   return quotes;
 }
 
