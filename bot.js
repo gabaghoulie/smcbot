@@ -75,6 +75,7 @@ function onMessageHandler (target, context, msg, self) {
     });
   }
 
+
   // Remove whitespace from chat message
   const commandName = msg.trim();
 
@@ -93,6 +94,9 @@ function onMessageHandler (target, context, msg, self) {
   if (commandName === '!abby' || commandName === '!abbyshapiro') {
     let quotes = getAbbyQuotes();
     client.say(target, `${quotes[Math.floor(Math.random()*quotes.length)]}`);
+  }
+  if (commandName === '!strain') {
+    client.say(target, `Banjo - https://www.leafly.com/strains/banjo`);
   }
 }
 
