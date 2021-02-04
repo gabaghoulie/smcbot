@@ -25,11 +25,11 @@ const client = new tmi.client(opts);
 
 // Register our event handlers (defined below)
 client.on('message', onMessageHandler);
-client.on('connected', onConnectedHandler);
 
 // Connect to Twitch:
 client.connect();
 
+client.on('connected', onConnectedHandler);
 // globals
 let bukkake = 0;
 let puchiFile = '/home/burnsnoss/bot/puchisms.txt'
@@ -59,20 +59,20 @@ function onMessageHandler (target, context, msg, self) {
 
   if (msg.includes('bigfollows')) {
     // use twitch API to check if they're a follower
-    $.ajax({
-      type: 'GET',
-      url: `https://api.twitch.tv/helix/users/follows?from_id=${context['user-id']}&to_id=${smb_id}`,
-      headers: {
-        'Client-ID': process.env.TTV_CLIENT_ID,
-        'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`
-      },
-      success: function(data) {
+//    $.ajax({
+ //     type: 'GET',
+   //   url: `https://api.twitch.tv/helix/users/follows?from_id=${context['user-id']}&to_id=${smb_id}`,
+     // headers: {
+      //  'Client-ID': process.env.TTV_CLIENT_ID,
+      //  'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`
+      //},
+      //success: function(data) {
         // time 'em out if they dont follow (bad boys bad boys)
-        if (data.total === 0) {
-          client.say(target, `/timeout ${context['display-name']} 300`);
-        }
-      }
-    });
+        //if (data.total === 0) {
+          client.say(target, `/timeout ${context['display-name']} 10`);
+        //}
+      //}
+    //});
   }
 
 
@@ -96,7 +96,7 @@ function onMessageHandler (target, context, msg, self) {
     client.say(target, `${quotes[Math.floor(Math.random()*quotes.length)]}`);
   }
   if (commandName === '!strain') {
-    client.say(target, `Banjo - https://www.leafly.com/strains/banjo`);
+    client.say(target, `Guava Cobbler - https://www.leafly.com/strains/guava + https://www.leafly.com/strains/cobbler`);
   }
 }
 
