@@ -53,7 +53,7 @@ function onMessageHandler (target, context, msg, self) {
   }
   
   if (msg.includes('chosen one') && target != '#sausagemcbot') {
-    client.say(target, ` ..(‿ˠ‿) _(‿ˠ‿) only the chosen one can fist both asses.⎝. Kreygasm .⎠`);
+    client.say(target, ` ........(‿ˠ‿) _(‿ˠ‿) only the chosen one can fist both asses.⎝. Kreygasm .⎠`);
     return;
   }
 
@@ -96,7 +96,14 @@ function onMessageHandler (target, context, msg, self) {
     client.say(target, `${quotes[Math.floor(Math.random()*quotes.length)]}`);
   }
   if (commandName === '!strain') {
-    client.say(target, `Guava Cobbler - https://www.leafly.com/strains/guava + https://www.leafly.com/strains/cobbler`);
+    client.say(target, `Lemon Haze - https://www.leafly.com/strains/lemon-haze`);
+  }
+  if (commandName === '!video') {
+    // TODO: have this auto-grab most recent youtube video
+    client.say(target, `NEW UNCONVENTIONAL SUSHI! https://youtu.be/IV1PqubiKXI `);
+  }
+  if (commandName === '!recipe') {
+    client.say(target, `Spicy Sausage Rigatoni - https://www.pinchofyum.com/spicy-sausage-rigatoni `);
   }
 }
 
