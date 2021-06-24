@@ -131,7 +131,7 @@ function onMessageHandler (target, context, msg, self) {
     var request = require('request');
 
     // replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
-    var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=ATOS&interval=5min&apikey=demo';  
+    var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=ATOS&interval=5min&apikey=' + process.env.STONKS_KEY;  
 
     request.get({
         url: url,
