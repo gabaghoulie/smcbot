@@ -3,8 +3,8 @@
 
 const tmi = require('tmi.js');
 const fs = require('fs');
-const dotenv = require('dotenv');
-dotenv.config();
+//const dotenv = require('dotenv');
+//dotenv.config();
 var jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
@@ -34,12 +34,12 @@ client.on('connected', onConnectedHandler);
 
 
 // config stuff for Google Cloud Translate API
-const {Translate} = require('@google-cloud/translate').v2;
-const GCT_CREDS = JSON.parse(process.env.TRANSLATE_CREDS);
-const translator = new Translate({
-    credentials: GCT_CREDS,
-    projectId: GCT_CREDS.project_id
-});
+// const {Translate} = require('@google-cloud/translate').v2;
+// const GCT_CREDS = JSON.parse(process.env.TRANSLATE_CREDS);
+// const translator = new Translate({
+//     credentials: GCT_CREDS,
+//     projectId: GCT_CREDS.project_id
+// });
 
 
 // globals
@@ -49,7 +49,7 @@ let bukkake = 0;
 let puchiFile = '/home/burnsnoss/bot/puchisms.txt';
 let abbyFile = '/home/burnsnoss/bot/abbyshapiro.txt';
 const smb_id = '219092110';
-let foreign_chatters = fs.readFileSync('translate.txt').toString().split('\n');
+//let foreign_chatters = fs.readFileSync('translate.txt').toString().split('\n');
 
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
@@ -116,17 +116,17 @@ function onMessageHandler (target, context, msg, self) {
     let quotes = getAbbyQuotes();
     client.say(target, `${quotes[Math.floor(Math.random()*quotes.length)]}`);
   }
-  if (commandName === '!strain') {
+  if (command === '!strain') {
     client.say(target, `Lemon Haze - https://www.leafly.com/strains/lemon-haze`);
   }
-  if (commandName === '!video') {
+  if (command === '!video') {
     // TODO: have this auto-grab most recent youtube video
     client.say(target, `NEW UNCONVENTIONAL SUSHI! https://youtu.be/IV1PqubiKXI `);
   }
-  if (commandName === '!recipe') {
+  if (command === '!recipe') {
     client.say(target, `Spicy Sausage Rigatoni - https://www.pinchofyum.com/spicy-sausage-rigatoni `);
   }
-  if (commandName === '!stonks') {
+  if (command === '!stonks') {
 
     var request = require('request');
 
@@ -170,9 +170,9 @@ function onMessageHandler (target, context, msg, self) {
 
 
   // CHECK SPECIAL USERS
-  if (foreign_chatters.indexOf(context.username)) {
-    client.say(target, translateText(msg, detectLanguage(msg)));
-  }
+  // if (foreign_chatters.indexOf(context.username)) {
+  //   client.say(target, translateText(msg, detectLanguage(msg)));
+  // }
 }
 
 const detectLanguage = async (text) => {
