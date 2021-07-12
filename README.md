@@ -7,6 +7,7 @@ TODO
     - python script?
     - can just go out to the twitch API 
     - how to keep track of bot PID (to determine if it's running)
-      - write PID to a file? search for PID using ps -aux?
+      - write PID to a file? config.json? 
+      - search for PID using ps -aux | grep ?
   - start commercial
   - custom sound alerts + corresponding alert browser source
