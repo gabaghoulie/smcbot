@@ -46,8 +46,9 @@ client.on('connected', onConnectedHandler);
 let bukkake = 0;
 // TODO: IMPLEMENT THIS
 // if (process.argv[2] == '-dev') {
-let puchiFile = '/home/burnsnoss/bot/puchisms.txt';
-let abbyFile = '/home/burnsnoss/bot/abbyshapiro.txt';
+let puchiFile = '/home/burnsnoss/bot/util/puchisms.txt';
+let abbyFile = '/home/burnsnoss/bot/util/abbyshapiro.txt';
+let puchiCounterFile = '/home/burnsnoss/bot/util/puchism_counter.json'
 const smb_id = '219092110';
 //let foreign_chatters = fs.readFileSync('translate.txt').toString().split('\n');
 
@@ -70,28 +71,29 @@ function onMessageHandler (target, context, msg, self) {
   }
   
   if (msg.includes('chosen one') && target != '#sausagemcbot') {
-    client.say(target, ` ........(‿ˠ‿) _(‿ˠ‿) only the chosen one can fist both asses.⎝. Kreygasm .⎠`);
+    client.say(target, ` .....(‿ˠ‿) _(‿ˠ‿) only the chosen one can fist both asses.⎝. Kreygasm .⎠`);
     return;
   }
 
   if (msg.includes('bigfollows')) {
    // use twitch API to check if they're a follower
-   $.ajax({
-     type: 'GET',
-     url: `https://api.twitch.tv/helix/users/follows?from_id=${context['user-id']}&to_id=${smb_id}`,
-     headers: {
-       'Client-ID': process.env.TTV_CLIENT_ID,
-       'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`
-      },
-      success: function(data) {
-        // time 'em out if they dont follow (bad boys bad boys)
-        console.log('bigfollows bad boye:');
-        console.log(data);
-        if (data.total == 0 || data.total == null) {
-          client.say(target, `/timeout ${context['display-name']} 10`);
-        }
-      }
-    });
+   // $.ajax({
+   //   type: 'GET',
+   //   url: `https://api.twitch.tv/helix/users/follows?from_id=${context['user-id']}&to_id=${smb_id}`,
+   //   headers: {
+   //     'Client-ID': process.env.TTV_CLIENT_ID,
+   //     'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`
+   //    },
+   //    success: function(data) {
+   //      // time 'em out if they dont follow (bad boys bad boys)
+   //      console.log('bigfollows bad boye:');
+   //      console.log(data);
+   //      if (data.total == 0 || data.total == null) {
+   //        client.say(target, `/timeout ${context['display-name']} 10`);
+   //      }
+   //    }
+   //  });
+   client.say(target, `/timeout ${context['display-name']} 10`);
   }
 
 
@@ -106,12 +108,16 @@ function onMessageHandler (target, context, msg, self) {
     client.say(target, `You rolled a ${num}`);
     return;
   }
+
   if (command === '!puchi') {
     let quotes = getPuchiQuotes();
     let ribbon = String.fromCodePoint(0x1F380);
+    let puchism = quotes[Math.floor(Math.random()*quotes.length)];
     client.say(target, `${ribbon} ${quotes[Math.floor(Math.random()*quotes.length)]} ${ribbon}`);
+    increasePuchismCounter(puchism);
     return;
   }
+
   if (command === '!abby' || command === '!abbyshapiro') {
     let quotes = getAbbyQuotes();
     client.say(target, `${quotes[Math.floor(Math.random()*quotes.length)]}`);
@@ -198,6 +204,15 @@ const translateText = async (text, targetLanguage) => {
 function getPuchiQuotes() {
   let quotes = fs.readFileSync(puchiFile).toString().split("\n");
   return quotes;
+}
+
+function increasePuchismCounter(puchism) {
+  let rawdata = fs.readFileSync(puchiCounterFile);
+  let puchismHisto = JSON.parse(rawdata);
+  puchismHisto[puchism] += 1;
+  let histoString = JSON.stringify(puchismHisto);
+  fs.writeFileSync(puchiCounterFile, histoString);
+  return;
 }
 
 function getAbbyQuotes() {

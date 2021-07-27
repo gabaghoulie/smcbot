@@ -11,3 +11,4 @@ TODO
       - search for PID using ps -aux | grep ?
   - start commercial
   - custom sound alerts + corresponding alert browser source
+  - puchism counter
