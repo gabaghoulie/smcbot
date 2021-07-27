@@ -97,6 +97,13 @@ function onMessageHandler (target, context, msg, self) {
   }
 
 
+  // CHECKING COMMANDS WITH ARGUMENTS
+
+  if (msg.substring(0, 12) == "!addpuchism " && target == "#sausagemcburn") {
+    addPuchism(msg.substring(12, msg.length));
+  }
+
+
   // CHECKING TRIMMED MESSAGE
 
   // Remove whitespace from chat message
@@ -115,6 +122,12 @@ function onMessageHandler (target, context, msg, self) {
     let puchism = quotes[Math.floor(Math.random()*quotes.length)];
     client.say(target, `${ribbon} ${puchism} ${ribbon}`);
     increasePuchismCounter(puchism);
+    return;
+  }
+
+  if (command === '!topPuchisms' || command === '!toppuchisms') {
+    let topPuchismsMsg = topPuchisms();
+    client.say(target, `${topPuchismsMsg}`);
     return;
   }
 
@@ -216,6 +229,33 @@ function increasePuchismCounter(puchism) {
   let histoString = JSON.stringify(puchismHisto);
   fs.writeFileSync(puchiCounterFile, histoString);
   return;
+}
+
+function addPuchism(puchism) {
+  return;
+}
+
+function topPuchisms() {
+  let rawdata = fs.readFileSync(puchiCounterFile);
+  let puchismHisto = JSON.parse(rawdata);
+  let sortable = [];
+  for (let puchism in puchismHisto) {
+      sortable.push([puchism, puchismHisto[puchism]]);
+  }
+  sortable.sort(function(a, b) {
+    if (a[1] >= b[1]) {
+      return 0;
+    }
+    else {
+      return 1;
+    }
+  });
+  // print top 3 puchisms
+  let output = "";
+  for (let i = 0; i < 3, i++) {
+    output += sortable[i][0] + ": " + sortable[i][1] + " || ";
+  }
+  return output;
 }
 
 function getAbbyQuotes() {
