@@ -113,7 +113,7 @@ function onMessageHandler (target, context, msg, self) {
     let quotes = getPuchiQuotes();
     let ribbon = String.fromCodePoint(0x1F380);
     let puchism = quotes[Math.floor(Math.random()*quotes.length)];
-    client.say(target, `${ribbon} ${quotes[Math.floor(Math.random()*quotes.length)]} ${ribbon}`);
+    client.say(target, `${ribbon} ${puchism} ${ribbon}`);
     increasePuchismCounter(puchism);
     return;
   }
@@ -203,6 +203,9 @@ const translateText = async (text, targetLanguage) => {
 
 function getPuchiQuotes() {
   let quotes = fs.readFileSync(puchiFile).toString().split("\n");
+  for (let i = 0; i < quotes.length; i++) {
+    quotes[i] = quotes[i].replace("\r", "");
+  }
   return quotes;
 }
 
