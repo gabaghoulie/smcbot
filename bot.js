@@ -243,12 +243,13 @@ function topPuchisms() {
       sortable.push([puchism, puchismHisto[puchism]]);
   }
   sortable.sort(function(a, b) {
-    if (a[1] >= b[1]) {
-      return 0;
-    }
-    else {
-      return 1;
-    }
+    //if (a[1] > b[1]) {
+     // return 0;
+    //}
+    //else {
+    //  return 1;
+    //}
+    return -1 * (a[1] - b[1]);
   });
   // print top 3 puchisms
   let output = "";
