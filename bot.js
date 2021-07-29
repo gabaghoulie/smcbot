@@ -266,7 +266,7 @@ function topPuchisms() {
     return -1 * (a[1] - b[1]);
   });
   // print top 3 puchisms
-  let output = ribbon;
+  let output = ribbon + " ";
   for (let i = 0; i < 3; i++) {
     output += sortable[i][0] + ": " + sortable[i][1] + " " + ribbon + " ";
   }
