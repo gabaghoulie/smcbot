@@ -50,6 +50,7 @@ let puchiFile = '/home/burnsnoss/bot/util/puchisms.txt';
 let abbyFile = '/home/burnsnoss/bot/util/abbyshapiro.txt';
 let puchiCounterFile = '/home/burnsnoss/bot/util/puchism_counter.json'
 const smb_id = '219092110';
+let ribbon = String.fromCodePoint(0x1F380);
 //let foreign_chatters = fs.readFileSync('translate.txt').toString().split('\n');
 
 // Called every time a message comes in
@@ -101,6 +102,7 @@ function onMessageHandler (target, context, msg, self) {
 
   if (msg.substring(0, 12) == "!addpuchism " && target == "#sausagemcburn") {
     addPuchism(msg.substring(12, msg.length));
+    return;
   }
 
 
@@ -118,14 +120,13 @@ function onMessageHandler (target, context, msg, self) {
 
   if (command === '!puchi') {
     let quotes = getPuchiQuotes();
-    let ribbon = String.fromCodePoint(0x1F380);
     let puchism = quotes[Math.floor(Math.random()*quotes.length)];
     client.say(target, `${ribbon} ${puchism} ${ribbon}`);
     increasePuchismCounter(puchism);
     return;
   }
 
-  if (command === '!topPuchisms' || command === '!toppuchisms') {
+  if (command === '!toppuchisms' || command === '!toppuchism') {
     let topPuchismsMsg = topPuchisms();
     client.say(target, `${topPuchismsMsg}`);
     return;
@@ -222,19 +223,37 @@ function getPuchiQuotes() {
   return quotes;
 }
 
-function increasePuchismCounter(puchism) {
+// gets and parses contents of the puchism counter json file
+function getPuchiHisto() {
   let rawdata = fs.readFileSync(puchiCounterFile);
-  let puchismHisto = JSON.parse(rawdata);
-  puchismHisto[puchism] += 1;
-  let histoString = JSON.stringify(puchismHisto);
+  return JSON.parse(rawdata);
+}
+
+// writes the puchism histogram to the puchism counter json file
+function setPuchiHisto(histo) {
+  let histoString = JSON.stringify(histo);
   fs.writeFileSync(puchiCounterFile, histoString);
+}
+
+function increasePuchismCounter(puchism) {
+  let puchismHisto = getPuchiHisto();
+  puchismHisto[puchism] += 1;
+  setPuchiHisto(puchismHisto);
   return;
 }
 
 function addPuchism(puchism) {
+  // add a puchism to puchisms.txt
+  fs.appendFileSync(puchiFile, "\n" + puchism);
+
+  // update puchism_counter.json
+  let puchismHisto = getPuchiHisto();
+  puchismHisto[puchism] = 0;
+  setPuchiHisto(puchismHisto);
   return;
 }
 
+// returns top 3 puchisms
 function topPuchisms() {
   let rawdata = fs.readFileSync(puchiCounterFile);
   let puchismHisto = JSON.parse(rawdata);
@@ -242,19 +261,14 @@ function topPuchisms() {
   for (let puchism in puchismHisto) {
       sortable.push([puchism, puchismHisto[puchism]]);
   }
+  // sort by values of json obj
   sortable.sort(function(a, b) {
-    //if (a[1] > b[1]) {
-     // return 0;
-    //}
-    //else {
-    //  return 1;
-    //}
     return -1 * (a[1] - b[1]);
   });
   // print top 3 puchisms
-  let output = "";
+  let output = ribbon;
   for (let i = 0; i < 3; i++) {
-    output += sortable[i][0] + ": " + sortable[i][1] + " || ";
+    output += sortable[i][0] + ": " + sortable[i][1] + ribbon;
   }
   return output;
 }
@@ -274,3 +288,7 @@ function rollDice () {
 function onConnectedHandler (addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
 }
+
+
+// manifesting the hot german daddy thatll choke me out and make me bust like a dormant volcano thatll endanger the planet
+// saus could stare at a wall doing nothing and my coochie would turn into a pressure wash system
