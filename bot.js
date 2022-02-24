@@ -46,9 +46,13 @@ client.on('connected', onConnectedHandler);
 let bukkake = 0;
 // TODO: IMPLEMENT THIS
 // if (process.argv[2] == '-dev') {
+
 let puchiFile = '/home/burnsnoss/bot/util/puchisms.txt';
 let abbyFile = '/home/burnsnoss/bot/util/abbyshapiro.txt';
-let puchiCounterFile = '/home/burnsnoss/bot/util/puchism_counter.json'
+let puchiCounterFile = '/home/burnsnoss/bot/util/puchism_counter.json';
+let loopFile = '/home/burnsnoss/bot/util/loopisms.txt';
+let loopCounterFile = '/home/burnsnoss/bot/util/loopism_counter.json';
+
 const smb_id = '219092110';
 let ribbon = String.fromCodePoint(0x1F380);
 //let foreign_chatters = fs.readFileSync('translate.txt').toString().split('\n');
@@ -105,6 +109,11 @@ function onMessageHandler (target, context, msg, self) {
     return;
   }
 
+  if (msg.substring(0, 12) == "!addloopism " && target == "#sausagemcburn") {
+    addLoopism(msg.substring(12, msg.length));
+    return;
+  }
+
 
   // CHECKING TRIMMED MESSAGE
 
@@ -117,6 +126,8 @@ function onMessageHandler (target, context, msg, self) {
     client.say(target, `You rolled a ${num}`);
     return;
   }
+
+  // PUCHISMS
 
   if (command === '!puchi') {
     let quotes = getPuchiQuotes();
@@ -132,20 +143,40 @@ function onMessageHandler (target, context, msg, self) {
     return;
   }
 
+  // YUNGLOOP 
+
+  if (command === '!yungloop') {
+    let quotes = getLoopQuotes();
+    let loopism = quotes[Math.floor(Math.random()*quotes.length)];
+    client.say(target, `pepeSmoke ${loopism} pepeSmoke`);
+    increaseLoopismCounter(loopism);
+    return;
+  }
+
+  if (command === '!toploopisms' || command === '!toploopism') {
+    let topLoopismsMsg = topLoopisms();
+    client.say(target, `${topLoopismsMsg}`);
+    return;
+  }
+
   if (command === '!abby' || command === '!abbyshapiro') {
     let quotes = getAbbyQuotes();
     client.say(target, `${quotes[Math.floor(Math.random()*quotes.length)]}`);
   }
+
   if (command === '!strain') {
     client.say(target, `Lemon Haze - https://www.leafly.com/strains/lemon-haze`);
   }
+
   if (command === '!video') {
     // TODO: have this auto-grab most recent youtube video
     client.say(target, `NEW UNCONVENTIONAL SUSHI! https://youtu.be/IV1PqubiKXI `);
   }
+
   if (command === '!recipe') {
     client.say(target, `Spicy Sausage Rigatoni - https://www.pinchofyum.com/spicy-sausage-rigatoni `);
   }
+
   if (command === '!stonks') {
 
     var request = require('request');
@@ -223,9 +254,22 @@ function getPuchiQuotes() {
   return quotes;
 }
 
+function getLoopQuotes() {
+  let quotes = fs.readFileSync(loopFile).toString().split("\n");
+  for (let i = 0; i < quotes.length; i++) {
+    quotes[i] = quotes[i].replace("\r", "");
+  }
+  return quotes;
+}
+
 // gets and parses contents of the puchism counter json file
 function getPuchiHisto() {
   let rawdata = fs.readFileSync(puchiCounterFile);
+  return JSON.parse(rawdata);
+}
+
+function getLoopHisto() {
+  let rawdata = fs.readFileSync(loopCounterFile);
   return JSON.parse(rawdata);
 }
 
@@ -235,10 +279,22 @@ function setPuchiHisto(histo) {
   fs.writeFileSync(puchiCounterFile, histoString);
 }
 
+function setLoopHisto(histo) {
+  let histoString = JSON.stringify(histo);
+  fs.writeFileSync(loopCounterFile, histoString);
+}
+
 function increasePuchismCounter(puchism) {
   let puchismHisto = getPuchiHisto();
   puchismHisto[puchism] += 1;
   setPuchiHisto(puchismHisto);
+  return;
+}
+
+function increaseLoopismCounter(loopism) {
+  let loopismHisto = getLoopHisto();
+  loopismHisto[loopism] += 1;
+  setLoopHisto(loopismHisto);
   return;
 }
 
@@ -250,6 +306,17 @@ function addPuchism(puchism) {
   let puchismHisto = getPuchiHisto();
   puchismHisto[puchism] = 0;
   setPuchiHisto(puchismHisto);
+  return;
+}
+
+function addLoopism(loopism) {
+  // add a loopism to loopisms.txt
+  fs.appendFileSync(loopFile, "\n" + loopism);
+
+  // update loopism_counter.json
+  let loopismHisto = getLoopHisto();
+  loopismHisto[loopism] = 0;
+  setLoopHisto(loopismHisto);
   return;
 }
 
@@ -269,6 +336,25 @@ function topPuchisms() {
   let output = ribbon;
   for (let i = 0; i < 3; i++) {
     output += sortable[i][0] + ": " + sortable[i][1] + " " + ribbon + " ";
+  }
+  return output;
+}
+
+function topLoopisms() {
+  let rawdata = fs.readFileSync(loopCounterFile);
+  let loopismHisto = JSON.parse(rawdata);
+  let sortable = [];
+  for (let loopism in loopismHisto) {
+      sortable.push([loopism, loopismHisto[loopism]]);
+  }
+  // sort by values of json obj
+  sortable.sort(function(a, b) {
+    return -1 * (a[1] - b[1]);
+  });
+  // print top 3 loopisms
+  let output = "pepeSmoke";
+  for (let i = 0; i < 3; i++) {
+    output += sortable[i][0] + ": " + sortable[i][1] + " " + "pepeSmoke" + " ";
   }
   return output;
 }
